@@ -1,0 +1,16 @@
+using System.ComponentModel.DataAnnotations;
+
+namespace Disco.DTOs;
+
+public class UserDTO
+{
+  public Guid Id { get; set; }
+  public string Name { get; set; } = string.Empty;
+
+  [EmailAddress]
+  public string Email { get; set; } = string.Empty;
+  public bool? Isverified { get; set; } = false;
+  public DateTime? Createdat { get; set; }
+  public DateTime? Updatedat { get; set; }
+  public string? Role { get; set; }
+}

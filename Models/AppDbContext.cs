@@ -46,17 +46,17 @@ public partial class AppDbContext : DbContext
             entity.Property(e => e.Bio).HasColumnName("bio");
             entity.Property(e => e.Createdat)
                 .HasDefaultValueSql("now()")
-                .HasColumnType("timestamp without time zone")
+                .HasColumnType("timestamp with time zone")
                 .HasColumnName("createdat");
             entity.Property(e => e.Deletedat)
-                .HasColumnType("timestamp without time zone")
+                .HasColumnType("timestamp with time zone")
                 .HasColumnName("deletedat");
             entity.Property(e => e.Name)
                 .HasMaxLength(255)
                 .HasColumnName("name");
             entity.Property(e => e.Updatedat)
                 .HasDefaultValueSql("now()")
-                .HasColumnType("timestamp without time zone")
+                .HasColumnType("timestamp with time zone")
                 .HasColumnName("updatedat");
 
             entity.HasMany(d => d.Users).WithMany(p => p.Artists)
@@ -97,17 +97,17 @@ public partial class AppDbContext : DbContext
             entity.Property(e => e.Content).HasColumnName("content");
             entity.Property(e => e.Createdat)
                 .HasDefaultValueSql("now()")
-                .HasColumnType("timestamp without time zone")
+                .HasColumnType("timestamp with time zone")
                 .HasColumnName("createdat");
             entity.Property(e => e.Deletedat)
-                .HasColumnType("timestamp without time zone")
+                .HasColumnType("timestamp with time zone")
                 .HasColumnName("deletedat");
             entity.Property(e => e.Title)
                 .HasMaxLength(255)
                 .HasColumnName("title");
             entity.Property(e => e.Updatedat)
                 .HasDefaultValueSql("now()")
-                .HasColumnType("timestamp without time zone")
+                .HasColumnType("timestamp with time zone")
                 .HasColumnName("updatedat");
 
             entity.HasOne(d => d.Artist).WithMany(p => p.Posts)
@@ -188,16 +188,16 @@ public partial class AppDbContext : DbContext
             entity.Property(e => e.Content).HasColumnName("content");
             entity.Property(e => e.Createdat)
                 .HasDefaultValueSql("now()")
-                .HasColumnType("timestamp without time zone")
+                .HasColumnType("timestamp with time zone")
                 .HasColumnName("createdat");
             entity.Property(e => e.Deletedat)
-                .HasColumnType("timestamp without time zone")
+                .HasColumnType("timestamp with time zone")
                 .HasColumnName("deletedat");
             entity.Property(e => e.Parentid).HasColumnName("parentid");
             entity.Property(e => e.Postid).HasColumnName("postid");
             entity.Property(e => e.Updatedat)
                 .HasDefaultValueSql("now()")
-                .HasColumnType("timestamp without time zone")
+                .HasColumnType("timestamp with time zone")
                 .HasColumnName("updatedat");
 
             entity.HasOne(d => d.Author).WithMany(p => p.Replies)
@@ -230,10 +230,10 @@ public partial class AppDbContext : DbContext
             entity.Property(e => e.Bio).HasColumnName("bio");
             entity.Property(e => e.Createdat)
                 .HasDefaultValueSql("now()")
-                .HasColumnType("timestamp without time zone")
+                .HasColumnType("timestamp with time zone")
                 .HasColumnName("createdat");
             entity.Property(e => e.Deletedat)
-                .HasColumnType("timestamp without time zone")
+                .HasColumnType("timestamp with time zone")
                 .HasColumnName("deletedat");
             entity.Property(e => e.Email)
                 .HasMaxLength(255)
@@ -252,7 +252,7 @@ public partial class AppDbContext : DbContext
                 .HasColumnName("role");
             entity.Property(e => e.Updatedat)
                 .HasDefaultValueSql("now()")
-                .HasColumnType("timestamp without time zone")
+                .HasColumnType("timestamp with time zone")
                 .HasColumnName("updatedat");
             entity.Property(e => e.Verificationtoken).HasColumnName("verificationtoken");
 
@@ -299,4 +299,17 @@ public partial class AppDbContext : DbContext
     }
 
     partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
+
+    public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
+    {
+        var entries = ChangeTracker.Entries()
+            .Where(e => e.Entity is User && e.State == EntityState.Modified);
+
+        foreach (var entry in entries)
+        {
+            ((User)entry.Entity).Updatedat = DateTime.UtcNow;
+        }
+
+        return base.SaveChangesAsync(cancellationToken);
+    }
 }
