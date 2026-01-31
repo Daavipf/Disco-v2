@@ -248,8 +248,8 @@ public partial class AppDbContext : DbContext
             entity.Property(e => e.Resetpasswordtoken).HasColumnName("resetpasswordtoken");
             entity.Property(e => e.Role)
                 .HasMaxLength(20)
-                .HasDefaultValueSql("'USER'::character varying")
-                .HasColumnName("role");
+                .HasColumnName("role")
+                .HasConversion<string>();
             entity.Property(e => e.Updatedat)
                 .HasDefaultValueSql("now()")
                 .HasColumnType("timestamp with time zone")
@@ -294,6 +294,8 @@ public partial class AppDbContext : DbContext
                         j.IndexerProperty<Guid>("Followerid").HasColumnName("followerid");
                     });
         });
+
+        modelBuilder.Entity<Post>().HasQueryFilter(p => p.Deletedat == null);
 
         OnModelCreatingPartial(modelBuilder);
     }

@@ -40,7 +40,8 @@ create table Artists(
   createdAt timestamp with time zone default now(),
   updatedAt timestamp with time zone default now(),
   deletedAt timestamp with time zone,
-  primary key (id)
+  primary key (id),
+  unique (name)
 );
 
 create table Artists_Followers(

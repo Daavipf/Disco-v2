@@ -54,7 +54,7 @@ public class AuthController : ControllerBase
       Isverified = user.Isverified,
       Createdat = user.Createdat,
       Updatedat = user.Updatedat,
-      Role = user.Role
+      Role = user.Role.ToString()
     };
     return Created($"/v1/users/{userDTO.Id}", userDTO);
   }
@@ -105,7 +105,7 @@ public class AuthController : ControllerBase
       Isverified = user.Isverified,
       Createdat = user.Createdat,
       Updatedat = user.Updatedat,
-      Role = user.Role
+      Role = user.Role.ToString()
     };
 
     return Ok(new

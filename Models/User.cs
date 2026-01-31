@@ -12,7 +12,7 @@ public partial class User
 
     public string Email { get; set; } = null!;
 
-    public string? Role { get; set; }
+    public UserRole Role { get; set; } = UserRole.User;
 
     public string Hashpassword { get; set; } = null!;
 
