@@ -108,10 +108,10 @@ public class AuthController : ControllerBase
       Role = user.Role.ToString()
     };
 
-    return Ok(new
+    return Ok(new LoginResponseDTO
     {
-      user = userDTO,
-      token
+      User = userDTO,
+      Token = token
     });
   }
 
