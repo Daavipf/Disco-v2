@@ -19,3 +19,9 @@ public class SignupDTO
   [Compare("Password", ErrorMessage = "As senhas não conferem")]
   public string ConfirmPassword { get; set; } = string.Empty;
 }
+
+public class SignupResponseDTO
+{
+  public UserDTO User { get; set; }
+  public string Token { get; set; } = string.Empty;
+}

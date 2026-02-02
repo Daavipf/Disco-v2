@@ -21,6 +21,16 @@ public class AuthController : ControllerBase
   [HttpPost("signup")]
   public async Task<IActionResult> Signup([FromBody] SignupDTO signupDetails)
   {
+    var userExists = await _context.Users.AnyAsync(u => u.Email == signupDetails.Email);
+    if (userExists)
+    {
+      return BadRequest("Já existe um usuário cadastrado com este e-mail.");
+    }
+
+    if (signupDetails.Password != signupDetails.ConfirmPassword)
+    {
+      return BadRequest("As senhas não conferem");
+    }
     var hash = BCrypt.Net.BCrypt.HashPassword(signupDetails.Password);
 
     var verificationToken = Guid.NewGuid().ToString();
@@ -56,7 +66,16 @@ public class AuthController : ControllerBase
       Updatedat = user.Updatedat,
       Role = user.Role.ToString()
     };
-    return Created($"/v1/users/{userDTO.Id}", userDTO);
+
+    // Num ambiente de produção real, o token seria apenas enviado por e-mail, não retornado pela API
+    // Aqui está apenas para fins de teste
+    var signupResponse = new SignupResponseDTO
+    {
+      User = userDTO,
+      Token = verificationToken
+    };
+
+    return Created($"/v1/users/{userDTO.Id}", signupResponse);
   }
 
   [HttpPost("verify")]
@@ -131,6 +150,11 @@ public class AuthController : ControllerBase
   [HttpPost("reset-password")]
   public async Task<IActionResult> ResetPassword([FromBody] ResetPasswordDTO resetDto)
   {
+    if (resetDto.Password != resetDto.ConfirmPassword)
+    {
+      return BadRequest("As senhas não conferem");
+    }
+
     var user = await _context.Users
         .FirstOrDefaultAsync(u => u.Resetpasswordtoken == resetDto.Token);
 

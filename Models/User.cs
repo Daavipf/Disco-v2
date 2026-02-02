@@ -22,7 +22,7 @@ public partial class User
 
     public string? Avatar { get; set; }
 
-    public bool? Isverified { get; set; }
+    public bool Isverified { get; set; } = false;
 
     public string? Verificationtoken { get; set; }
 
