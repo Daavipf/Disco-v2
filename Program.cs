@@ -5,7 +5,8 @@ using Disco.Models;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
-var key = Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]);
+var jwtKey = builder.Configuration["Jwt:Key"] ?? throw new InvalidOperationException("JWT Key is missing!");
+var key = Encoding.UTF8.GetBytes(jwtKey);
 var dbConnectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 
 // Add services to the container.
@@ -28,9 +29,12 @@ builder.Services.AddAuthentication(options =>
 });
 
 builder.Services.AddControllers();
-builder.Services.AddDbContext<AppDbContext>(options =>
-    options.UseNpgsql(dbConnectionString)
-);
+
+if (!builder.Environment.IsEnvironment("Testing"))
+{
+    builder.Services.AddDbContext<AppDbContext>(options => options.UseNpgsql(dbConnectionString));
+}
+
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
 
