@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using Disco.Models;
 
 namespace Disco.DTOs;
 
@@ -12,5 +13,7 @@ public class UserDTO
   public bool? Isverified { get; set; } = false;
   public DateTime? Createdat { get; set; }
   public DateTime? Updatedat { get; set; }
-  public string? Role { get; set; }
+  public UserRole? Role { get; set; }
+  public string? Bio { get; set; }
+  public string? Avatar { get; set; }
 }

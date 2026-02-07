@@ -64,7 +64,7 @@ public class AuthController : ControllerBase
       Isverified = user.Isverified,
       Createdat = user.Createdat,
       Updatedat = user.Updatedat,
-      Role = user.Role.ToString()
+      Role = user.Role
     };
 
     // Num ambiente de produção real, o token seria apenas enviado por e-mail, não retornado pela API
@@ -124,7 +124,7 @@ public class AuthController : ControllerBase
       Isverified = user.Isverified,
       Createdat = user.Createdat,
       Updatedat = user.Updatedat,
-      Role = user.Role.ToString()
+      Role = user.Role
     };
 
     return Ok(new LoginResponseDTO
