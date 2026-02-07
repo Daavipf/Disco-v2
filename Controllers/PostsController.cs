@@ -13,7 +13,6 @@ using Disco.Extensions;
 
 namespace Disco.Controllers
 {
-    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class PostsController : ControllerBase
@@ -142,6 +141,7 @@ namespace Disco.Controllers
 
         // POST: api/Posts
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        [Authorize]
         [HttpPost]
         public async Task<ActionResult<Post>> PostPost(PostRequestDTO postDto)
         {
@@ -182,6 +182,7 @@ namespace Disco.Controllers
         }
 
         // SOFT-DELETE: api/Posts/{id}
+        [Authorize]
         [HttpDelete("{id}")]
         public async Task<IActionResult> SoftDeletePost(Guid id)
         {
@@ -206,6 +207,7 @@ namespace Disco.Controllers
         }
 
         // RESTORE: api/Posts/{id}/restore
+        [Authorize]
         [HttpPatch("{id}/restore")]
         public async Task<IActionResult> RestorePost(Guid id)
         {
@@ -235,6 +237,7 @@ namespace Disco.Controllers
             return Ok(new { message = "Post restaurado com sucesso." });
         }
 
+        [Authorize]
         [HttpPost("react")]
         public async Task<IActionResult> ReactToPost(ReactionDTO reactionDto)
         {
